@@ -139,7 +139,7 @@ While analyzing a four-dimensional nonlinear system is certainly feasible, it is
 	\includegraphics[height=5cm]{keener2.png}
 	\caption{Action Potential}
 \end{subfigure}
-	\caption{Dynamics of Action Potential on Shared Time-Scale (ms)}
+	\caption{Dynamics of H-H model Without Approximation on Shared Time-Scale (ms)}
 	\label{fig:keen}
 \end{figure}
 
@@ -151,7 +151,27 @@ Firstly, from Equation \ref{eq:time}, it's clear that the time constants, $\tau_
     \frac{dn}{dt} &= \frac{n_{\infty}-n}{\tau_n} 
 \end{align*}
 
-The assumption of taking $h$ to be constant can be judged visually in Figure \ref{fig:keen}, borrowed from Keener and Sneyd\cite{keener}. We'll develop this assumption further in a later section.
+The assumption of taking $h$ to be constant can be judged visually in Figure \ref{fig:keen}, borrowed from Keener and Sneyd, which shows values of the unapproximated model\cite{keener}.
+
+\begin{figure}
+\centering
+\begin{subfigure}{\textwidth}
+	\centering
+	\includegraphics[width=10cm]{fastFast_nullc.png}
+	\caption{$I_{ext}=0$ nullclines}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+	\centering
+	\includegraphics[width=10cm]{fastFast.png}
+	\caption{$I_{ext}=0$ action potential}
+\end{subfigure}
+	\caption{V-nullcline (Red) and n-nullcline (Green) for $I_{ext}$ on and off of simple cubic model, with associated action potentials}
+	\label{fig:first}
+\end{figure}
+
+In Figure \ref{fig:first}, we see the result of our approximation. We can see that there are three potential intersections of the nullclines (two are present in the bottom left but difficult to visualize due to their close proximity), implying that there are excited and relaxed fixed points. If one looks closely at the vector field, the excited equilibrium (upper right) appears to be attracting and in the lower left one equilibrium seems to be attracting while the other is a saddle. We'll call the on that is attracting the rest equilibrium, since it should correspond to the action potential going to rest. We also see that the action potential looks qualitatively different than it does in the unsimplified H-H model. The model seems less than ideal, but is a good initial step. 
+
+We could treat $n$ and $h$ as bifurcation parameters. For example, we can use our physical intuition to consider the effects of increasing $n$ and decreasing $h$. Evidently, increasing $n$ corresponds to activation of K$^+$ conductance and deactivation of Na$^+$ conductance. As a result, we could predict the disappearance of the fixed point that corresponds to an excited state. Indeed, one can show that there is a saddle node bifurcation in this scenario resulting in the disappearance of the saddle and excited fixed points.\cite{keener} Instead of showing this, we'll seek a model that can provide genuine insight in the next section.
 
 % Find fixed points (there are three)
 % Find Jacobian and evaluate at these (should have 1 each of stable, unstable, saddle)
@@ -162,6 +182,8 @@ The assumption of taking $h$ to be constant can be judged visually in Figure \re
 
 \section{Improving our Model}
 
+\subsection{Derivation}
+
 In our previous simplification, taking $m$ to converge infinitely fast to $m_\infty$ lent itself as a natural assumption due to its magnitude in speed relative to the other convergence speeds. However, taking $h$ to be constant seemed to be a shakier assumption, which was evaluated using Figure \ref{fig:keen}. However, one may have also observed, from the same figure, that there was some parity over $\approx 0.5$ that could be used. In other words, one could take the improved assumption that $n + h = 1$ which would imply that we could substitute $1 - n$ for $h$ rather than assuming that it is constant.
 
 Evidently, this would give us
@@ -171,68 +193,157 @@ Evidently, this would give us
     \frac{dn}{dt} &= \frac{n_{\infty}-n}{\tau_n} 
 \end{align*}
 
+\subsection{Phase Plane Analysis}
+
 We can then begin our analysis the usual way, finding the nullclines to then find the fixed points. Hence, $\frac{dn}{dt}=0$ when $n_{\infty}=n$ and $\frac{dV}{dt}=0$ is satisfied when
 
 \begin{align*}
         V &= \frac{\bar{G}_{Na}m_\infty^3(1-n)E_{Na}+\bar{G}_Kn^4E_K + G_LE_L + I_{ext}}{G_L + \bar{G}_{Na}m_\infty^3(1-n)+ \bar{G}_Kn^4}
 \end{align*}
 
-Note that there is a divergence in kinetics observed by the variables in the system. In other words, because the Na$^+$ channel activates very quickly, $m$ and $V$ are fast variables. On the other hand, $n$ is slow because K$^+$ channels are activated slowly.\cite{keener} We observe this directly in the vector field show in Figure \ref{fig:null} because the arrows specifying the trajectories in the phase plane are all nearly horizontal, except in the neighborhood of the V-nullcline.
+\begin{figure}
+\centering
+\begin{subfigure}{\textwidth}
+	\centering
+	\includegraphics[width=10cm]{fast_slow_nullclines.png}
+	\caption{$I_{ext}=0$ nullclines}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+	\centering
+	\includegraphics[width=10cm]{zero_ext_actionpotential.png}
+	\caption{$I_{ext}=0$ action potential}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+	\centering
+	\includegraphics[width=10cm]{fast_slow_nullclines_iext.png}
+	\caption{$I_{ext}=100$ nullclines}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+	\centering
+	\includegraphics[width=10cm]{fast_slow_nullclines_iext.png}
+	\caption{$I_{ext}=100$ action potential}
+\end{subfigure}
+	\caption{V-nullcline (Red) and n-nullcline (Green) for $I_{ext}$ on and off of simplified model, with associated action potentials}
+	\label{fig:nullc}
+\end{figure}
 
-We observe that $I_{ext}$ shifts up the $V$ nullcline and produces sustained action potentials in response in Figure \ref{fig:nullc}. Indeed, such behavior can be readily explained by this simplified model. First, note that the V-nullcline has a cubic shape, creating 3 branches. From the sign of $\frac{dV}{dt}$ we can see that
+Note that there is a divergence in kinetics observed by the variables in the system. In other words, because the Na$^+$ channel activates very quickly, $m$ and $V$ are fast variables. On the other hand, $n$ is slow because K$^+$ channels are activated slowly.\cite{keener} We observe this directly in the vector field shown in Figure \ref{fig:nullc} because the arrows specifying the trajectories in the phase plane are all nearly horizontal, except in the neighborhood of the V-nullcline.
+
+We observe that $I_{ext}$ shifts up the $V$ nullcline and produces sustained action potentials in response in Figure \ref{fig:nullc}. Indeed, such behavior can be readily explained by this simplified model. It's at least clear that there is some sort of bifurcation being produced when $I_{ext}$ is in some critical range. When it is in this range, there must be an limit cycle oscillation (LCO) that becomes an attractor and therefore creates these sustained oscillations. 
+
+First, note that the V-nullcline has a cubic shape, creating 3 branches (left, middle, right). The branches can be distinguished by the number of $V$-nullcline intersections with constant values of $n$ (horizontal lines). If one moves along the $V$-nullcline with $V$, then one will have 1 (left) to 3 (middle) to 1 (right) intersections. From the sign of $\frac{dV}{dt}$, it's clear that the middle branch is unstable and trajectories move toward the left and right branches.
+
+Evidently, the interesting feature that explains the observed effect of $I_{ext}$ is hysteresis. Hence, consider the trajectory of the initial value $(n,V)\approx (0.6,80)$ which is evidently on or near the right branch of our V-nullcline and therefore governed by $dn/dt$ which is positive here. Hence, the solution will move up the $V$-nullcline until it has a turning point. At this turning point, the solution will "jump across" to the left branch and the right branch will cease to exist. Then, on the left branch $dn/dt<0$ so the solution will begin to move down the $V$-nullcline. Then, it will come across the equilibrium point (intersection with $n$-nullcline) and relax (completing the action potential).
+
+Impressively, this is the qualitative behavior we observe in action potentials with no external current, which is plotted in Figure \ref{fig:nullc}.
+
+Now, it's clear why sustained potentials are realized when $I_{ext}$ is applied and in some proper range: The fixed point moves to the middle branch. Hence, consider our same example. The point begins on the right branch and travels with increasing $n$ until it reaches the turning point. Once it reaches the turning point, it jumps to the left branch and the right branch ceases to exist. However, the derivative now flips signs and the solution begins to travel with decreasing $n$ until it reaches the turning point. Once it reaches this turning point, it jumps across to the right branch again, skipping over the fixed point entirely and continuing this process indefinitely!
+
+\section{H-H and Relaxation Oscillations}
+
+\subsection{Derivation}
+
+We've shown that we can reduce the H-H model to a two-variable system that contains one slow and one fast variable and still capture important qualitative behavior. However, it seems that the important qualitative behavior that the model captured was mainly due to the cubic nullcline, which introduced hysteresis, and our consideration of the implications of having one fast and one slow variable. FitzHugh and Nagumo were similarly motivated by this reasoning after deriving a model similar to our previous one\cite{keener}. Hence, one can construct a system that retains the following essential properties:
+
+\begin{enumerate}
+    \item Two variables, one fast ($V$) and one slow ($n$)
+    \item $V$ has a cubic nullcline and $n$ has a monotonically increasing nullcline
+    \item nullclines have a single intersection point (taken to be the origin WLOG)
+\end{enumerate}
+
+Hence, we can use the traditional FitzHugh-Nagumo system
+
+\begin{align*}
+    \epsilon {\dot  {V} }&= V(1-V)(V-\alpha) -n+I_{{{\rm {ext}}}} \\
+     {\dot  {n}}&=V-\gamma n
+\end{align*}
+
+with $0<\alpha<1$ and $\epsilon << 1$. We'll take $\alpha = 0.1$, $\gamma = 0.5$, and $\epsilon = 0.01$ which gives us
+
+\begin{align*}
+    0.01 {\dot  {V} }&= V(1-V)(V-0.1) -n+I_{{{\rm {ext}}}} \\
+     {\dot  {n}}&=V-0.5 n
+\end{align*}
+
+Notice that we chose $\epsilon$ to be small to ensure that $V$ is a fast variable and $n$ is a slow one. 
+
+\subsection{Qualitative Discussion}
+
+We can draw general conclusions before doing a rigorous analysis of this system. First, note that because $V$ is cubic we should have 3 branches of potential fixed points (which will not necessarily exist for all $n$). We'll say that these ranges are given by 
+
+\begin{align*}
+    V_l(n) \leq V_m(n) \leq V_u(n)
+\end{align*}
 
 \begin{figure}
 \centering
 \begin{subfigure}{.5\textwidth}
 	\centering
-	\includegraphics[width=5cm]{fast_slow_nullclines.png}
+	\includegraphics[width=5cm]{nullc_naguro.png}
 	\caption{$I_{ext}=0$ nullclines}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
 	\centering
-	\includegraphics[width=5cm]{zero_ext_actionpotential.png}
+	\includegraphics[width=5cm]{nagumo_ap.png}
 	\caption{$I_{ext}=0$ action potential}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
 	\centering
-	\includegraphics[width=5cm]{fast_slow_nullclines_iext.png}
+	\includegraphics[width=5cm]{sustained_nagumo_nullc.png}
 	\caption{$I_{ext}=100$ nullclines}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
 	\centering
-	\includegraphics[width=5cm]{fast_slow_nullclines_iext.png}
-	\caption{$I_{ext}=100$ action potential}
+	\includegraphics[width=5cm]{sustained_nagumo.png}
+	\caption{$I_{ext}=1$ action potential}
 \end{subfigure}
-	\caption{V-nullcline (Red) and n-nullcline (Green) for $I_{ext}$ on and off, with associated action potentials}
+	\caption{V-nullcline (Red) and n-nullcline (Green) for $I_{ext}$ on and off of simple cubic model, with associated action potentials}
 	\label{fig:nullc}
 \end{figure}
 
-\section{H-H as a van der Pol oscillator}
+\subsection{Analytical Discussion}
 
-We can simplify the Hodgkin Huxley Model to a van der Pol oscillator. 
-
-\begin{align}
-    \frac{dv}{dt} = v - \frac{v^3}{3} - w + I_{ext} \\
-    \tau\frac{dw}{dt} = v + a - bw
-\end{align}
-
-The Jacobian of the system is as follows.
+The Jacobian of the system with initial condition as above, $\alpha = 0.1$, $\gamma = 0.5$, and $\epsilon = 0.01$, is as follows.
 
 \begin{align*}
-\begin{bmatrix}
-    1-v^2      & -1 \\
-    \frac{1}{\tau}       & \frac{-b}{\tau} \\
+J(V,n) &= \begin{bmatrix}
+    -10(30v^2-22v+1)     & -100 \\
+    1      & 0.5 \\
 \end{bmatrix}
 \end{align*}
 
-Fixed points of the van der Pol oscillator
+Hence, the determinant, D, and trace, T are given by
 
-\section{Bifurcation Analysis of External Current}
+\begin{align*}
+D &= 5(30v^2-22v+1)+100 \\
+T &= -\frac{1+20(30v^2-22v+1)}{2}
+\end{align*}
 
+Evidently, when $I_{ext}=0$ there is a fixed point at the origin which would then have
+
+\begin{align*}
+D &= 105 \\
+T &= -\frac{1}{2}
+\end{align*}
+
+Evidently, this corresponds to a spiral sink. This is what our qualitative analysis would predict, as this relates to the fixed point lying on the left branch of the cubic nullcline, thus avoiding hysteresis and allowing the action potential to return to rest.
+
+However, as $I_{ext}$ is introduced we'll see a shift in the location of our fixed point to the middle branch, where we'll find the same qualitative hysteresis behavior which is analytically an attracting limit cycle. Hence, we should be able to show the existence of a Hopf bifurcation. The general fixed point is given by the solutions to 
+
+\begin{align*}
+I_{ext} &= V[(1-V)(0.1-V)+2] \\
+n &= 2V
+\end{align*}
 
 \section{Conclusion}
 
+In summary, we derived the 4-dimensional H-H model in the same way that Hodgkin and Huxley did in their groundbreaking paper. We then looked to reduce the system to two dimensions. We initially tested an assumption that involved setting two gating variables constant. This allowed for us to observe equilibria that corresponded to rest and excited action potential state and predict a saddle-node bifurcation under applied current.
 
+ We then, looked for a model that captured important qualitative behavior of the H-H model; namely, it's ability to Hopf bifurcate with applied current being the bifurcation parameter. This Hopf bifurcation was explained in terms of the hysteresis inherent to our cubic nullcline. Hence, when the single fixed point shifted to the middle branch it could never be reached by our perturbed system which would continue to oscillate with an attracting limit cycle. A second Hopf bifurcation occurred if enough current was applied, which implied the excited state becoming stable and reachable when the fixed point moved to the right branch of our cubic. 
+ 
+ Finally, we turned to a less qualitative discussion by observing which aspects of our second model actually produced the behaviors we were interested in. Hence, we reduced our system to something reminiscent of a van der Pol oscillator and showed the same qualitative behaviors we found previously and then found the Hopf bifurcations analytically.
+ 
+ Thankfully, the brave researchers who used numerical analysis to explicitly test our findings without approximation allows us to confirm the more qualitative results we found here in the sense that these Hopf bifurcations and action potentials are true phenomena observed in mathematics and in nature.\cite{monster}
 
 \bibliography{nonlinear}
 \bibliographystyle{plain}
