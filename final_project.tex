@@ -54,7 +54,7 @@ Using classic current conservation in a circuit, and adding the parameter of an 
     c_m\frac{dV_m}{dt} + I_{ion} = I_{ext}
 \end{equation}
 
-In our particular model, we will assume that $G_L$ is constant and the capacitance $c_m$ as well. $V_m$ is the potential within the cell mebrane, and $I_{ion}$ is the net ionic current within the cell.
+In our particular model, we will assume that $G_L$ is constant and the capacitance $c_m$ as well. $V_m$ is the potential within the cell membrane, and $I_{ion}$ is the net ionic current within the cell.
 
 The derivation of each ionic current through the different channels depends on the conductance parameter times the driving potential.
 
@@ -78,13 +78,41 @@ Where $m$, $h$, and $n$ follow the following differential equation, which is der
     \frac{dp}{dt} = a(V)(1-p) - b(V)p
 \end{equation}
 
-Hodgkin and Huxley discovered that as they kept the voltage constant, the conductance of the channels increased steadily to a maximum value. 
+Hodgkin and Huxley discovered that as they kept the voltage constant, the conductance of the channels increased steadily to a maximum value. They used this experimental data to achieve equations for the time step of increase of $p$.
+
+\begin{equation}
+    p_{\infty}(V) = \frac{a_p(V)}{a_p(V) + b_p(V)}
+\end{equation}
+\begin{equation}
+    \tau_p(V) = \frac{1}{a_p(V) + b_p(V)}
+    \label{eq:time}
+\end{equation}
+
+Where $p_{\infty}(V)$ is the steady state value at an given voltage and ${\tau_p}(V)$ are time constants of response of the gates. These constants can be experimentally fit to data and using Equation (5), $a_p(V)$ and $b_p(V)$ can be found. Thus, the final equations for the rate constants are as follows.
+
+\begin{align*}
+    a_m(V) &= \frac{0.1(25-V)}{exp(\frac{25-V}{10})-1}
+    &b_m(V) = 4e^{-V/18} \\
+    a_n(V) &= \frac{0.01(10-V)}{exp(\frac{10-V}{10})-1} 
+    &b_n(V) = 0.125e^{\frac{-V}{80}}\\
+    a_h(V) &= 0.07e^{\frac{-V}{20}} 
+    &b_h(V) = \frac{1}{\frac{exp(30-V)}{10}+1}
+\end{align*}
+
+We can also simplify equation 5 to the following.
 
 \begin{equation}
     \frac{dp}{dt} = \frac{p_{\infty}(V)-p}{\tau_p(V)}
 \end{equation}
 
-Where $p_{\infty}(V)$ is the steady state value at an given voltage and ${\tau_p}(V)$ are time constants of response of the gates. The combined system of differential equations is shown in the next section. 
+The combined system of differential equations is shown in the next section. Furthermore, in Figure \ref{fig:inf} we show the values of $m_\infty$ and $n_\infty$ derived using the equations above. 
+
+\begin{figure}
+\centering
+	\includegraphics[height=5cm]{gating.png}
+	\caption{$m_{\infty}$ (blue) and $n_{\infty}$ (orange)}
+		\label{fig:inf}
+\end{figure}
 
 \section{Deriving a Reduced-State Model}
 
@@ -116,7 +144,7 @@ While analyzing a four-dimensional nonlinear system is certainly feasible, it is
 \end{figure}
 
 
-Firstly, it has been observed empirically that the time constants, $\tau_i$ vary widely between these equations. In fact, reasonable estimates are $\tau_m \approx 0.4 ms$, $\tau_h \approx 8 ms$, and $\tau_n \approx 5 ms$.\cite{monster} Recall that $\tau_m$ is a measure of the speed with which $m$ converges to its steady state value $m_\infty$. Therefore, it may be a reasonable assumption to assume that $\tau_m$ is so fast compared to the other parameters that $m = m_\infty$. Then, we can either take $n$ or $h$ to be constant which would then give us a two-dimensional nonlinear system. Since $h$ fluctuates over the largest time-scale, we'll take it to be some constant $\bar{h}$. As a result, we have 
+Firstly, from Equation \ref{eq:time}, it's clear that the time constants, $\tau_i$ vary widely between these equations. For example, for a 20 mV potential, the values are $\tau_m \approx 0.4 ms$, $\tau_h \approx 8 ms$, and $\tau_n \approx 5 ms$. In general, it is true that $\tau_m$ is much smaller than the other time constants. Recall that $\tau_m$ is a measure of the speed with which $m$ converges to its steady state value $m_\infty$. Therefore, it may be a reasonable assumption to assume that $\tau_m$ is so fast compared to the other parameters that $m = m_\infty$. Then, we can either take $n$ or $h$ to be constant which would then give us a two-dimensional nonlinear system. Since $h$ fluctuates over the largest time-scale, we'll take it to be some constant $\bar{h}$. As a result, we have 
 
 \begin{align*}
         C\frac{dV}{dt} &= I_{ext} -\bar{G}_{Na}m_\infty^3\bar{h}(V-E_{Na}) -\bar{G}_{K}n^4(V-E_{K})  -\bar{G}_{L}(V-E_{L}) \\
@@ -124,6 +152,13 @@ Firstly, it has been observed empirically that the time constants, $\tau_i$ vary
 \end{align*}
 
 The assumption of taking $h$ to be constant can be judged visually in Figure \ref{fig:keen}, borrowed from Keener and Sneyd\cite{keener}. We'll develop this assumption further in a later section.
+
+% Find fixed points (there are three)
+% Find Jacobian and evaluate at these (should have 1 each of stable, unstable, saddle)
+
+% Show that as I_ext increases we have (1) subcritical hopf bifurcation, then as it increases more (2) supercritical hopf bifurcation
+
+% What this means is that initially the rest state is the most stable (so after an action potential, the nerve returns to rest). However, if we add some constant, external current, we can make a state of sustained action potentials stable. 
 
 \section{Improving our Model}
 
@@ -136,15 +171,68 @@ Evidently, this would give us
     \frac{dn}{dt} &= \frac{n_{\infty}-n}{\tau_n} 
 \end{align*}
 
-We can then begin our analysis the usual way, finding the null-clines to then find the fixed points. Hence, $\frac{dn}{dt}=0$ when $n_{\infty}=n$ and $\frac{dV}{dt}=0$ is satisfied when
+We can then begin our analysis the usual way, finding the nullclines to then find the fixed points. Hence, $\frac{dn}{dt}=0$ when $n_{\infty}=n$ and $\frac{dV}{dt}=0$ is satisfied when
 
 \begin{align*}
-        V &= \frac{\bar{G}_{Na}m_\infty^3(1-n)E_{Na}+\bar{G}_Kn^4E_K + G_LE_L + I_{ext}}{G_L + \bar{G}_{Na}m^3(1-n)+ \bar{G}_Kn^4}
+        V &= \frac{\bar{G}_{Na}m_\infty^3(1-n)E_{Na}+\bar{G}_Kn^4E_K + G_LE_L + I_{ext}}{G_L + \bar{G}_{Na}m_\infty^3(1-n)+ \bar{G}_Kn^4}
 \end{align*}
 
-Note that $I_{ext}$ shifts up the $V$ null-cline monotonically.
+Note that there is a divergence in kinetics observed by the variables in the system. In other words, because the Na$^+$ channel activates very quickly, $m$ and $V$ are fast variables. On the other hand, $n$ is slow because K$^+$ channels are activated slowly.\cite{keener} We observe this directly in the vector field show in Figure \ref{fig:null} because the arrows specifying the trajectories in the phase plane are all nearly horizontal, except in the neighborhood of the V-nullcline.
+
+We observe that $I_{ext}$ shifts up the $V$ nullcline and produces sustained action potentials in response in Figure \ref{fig:nullc}. Indeed, such behavior can be readily explained by this simplified model. First, note that the V-nullcline has a cubic shape, creating 3 branches. From the sign of $\frac{dV}{dt}$ we can see that
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+	\centering
+	\includegraphics[width=5cm]{fast_slow_nullclines.png}
+	\caption{$I_{ext}=0$ nullclines}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+	\centering
+	\includegraphics[width=5cm]{zero_ext_actionpotential.png}
+	\caption{$I_{ext}=0$ action potential}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+	\centering
+	\includegraphics[width=5cm]{fast_slow_nullclines_iext.png}
+	\caption{$I_{ext}=100$ nullclines}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+	\centering
+	\includegraphics[width=5cm]{fast_slow_nullclines_iext.png}
+	\caption{$I_{ext}=100$ action potential}
+\end{subfigure}
+	\caption{V-nullcline (Red) and n-nullcline (Green) for $I_{ext}$ on and off, with associated action potentials}
+	\label{fig:nullc}
+\end{figure}
+
+\section{H-H as a van der Pol oscillator}
+
+We can simplify the Hodgkin Huxley Model to a van der Pol oscillator. 
+
+\begin{align}
+    \frac{dv}{dt} = v - \frac{v^3}{3} - w + I_{ext} \\
+    \tau\frac{dw}{dt} = v + a - bw
+\end{align}
+
+The Jacobian of the system is as follows.
+
+\begin{align*}
+\begin{bmatrix}
+    1-v^2      & -1 \\
+    \frac{1}{\tau}       & \frac{-b}{\tau} \\
+\end{bmatrix}
+\end{align*}
+
+Fixed points of the van der Pol oscillator
+
+\section{Bifurcation Analysis of External Current}
+
 
 \section{Conclusion}
+
+
 
 \bibliography{nonlinear}
 \bibliographystyle{plain}
