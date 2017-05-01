@@ -35,7 +35,7 @@ Alan Lloyd Hodgkin and Andrew Huxley, in 1963, won the Noble Prize in Physiology
 
 In our project, we seek to simplify and visualize the model while still capturing the important qualitative behaviors of the axon system. Specifically, we will first take experimental data to fix some parameters to constants, effectively lowering the dimension of the H-H model. Then, we will redact this assumption and attempt to exploit the fact that one of our variables is fast and the other is slow by using nullcline analysis. We will seek to show that this model performs well at indicating important qualities of the H-H model. Finally, we will attempt to follow FitzHugh\cite{FITZHUGH1961445} and capture those same qualitative behaviors in a yet simpler model by observing which specific characteristics actually produce the interesting properties. 
 
-Of course, we must first determine what qualities of the H-H model are "important".
+Of course, we must first develop the H-H model itself.
 
 \section{Premises of the Hodgkin-Huxley Model}
 
@@ -231,7 +231,7 @@ We can then begin our analysis the usual way, finding the nullclines to then fin
 	\label{fig:nullc}
 \end{figure}
 
-Note that there is a divergence in kinetics observed by the variables in the system. In other words, because the Na$^+$ channel activates very quickly, $m$ and $V$ are fast variables. On the other hand, $n$ is slow because K$^+$ channels are activated slowly.\cite{keener} We observe this directly in the vector field shown in Figure \ref{fig:nullc} because the arrows specifying the trajectories in the phase plane are all nearly horizontal, except in the neighborhood of the $V$-nullcline. Note, then, that the implication is that solutions starting away from the $V$-nullcline will quickly move back toward this nullcline and then only observe the effect of $\frac{dn}{dt}$ when the solution is within a small neighborhood of the $V$-nullcline. 
+Note that there is a divergence in kinetics observed by the variables in the system. In other words, because the Na$^+$ channel activates very quickly, $m$ and $V$ are fast variables. On the other hand, $n$ is slow because K$^+$ channels are activated slowly.\cite{keener} We observe this directly in the vector field shown in Figure \ref{fig:nullc} because the arrows specifying the trajectories in the phase plane are all nearly horizontal, except in the neighborhood of the $V$-nullcline. Note, then, that the implication is that solutions starting away from the $V$-nullcline will quickly move in a horizontal direction and therefore only observe the effect of $\frac{dn}{dt}$ when the solution is within a small neighborhood of the $V$-nullcline. 
 
 Most interestingly, we observe that $I_{ext}$ shifts up the $V$-nullcline and produces sustained action potentials in response in Figure \ref{fig:nullc}.
 
@@ -278,12 +278,12 @@ Notice that we chose $\epsilon$ to be small to ensure that $V$ is a fast variabl
 We can draw general conclusions before doing a rigorous analysis of this system. First, note that because $V$ is cubic we should have 3 branches of potential fixed points on our $V$-nullcline (which will not necessarily exist for all $n$). We'll say that these ranges are given by 
 
 \begin{align*}
-    V_l(n) \leq V_m(n) \leq V_e(n)
+    V_l(n) \leq V_m(n) \leq V_r(n)
 \end{align*}
 
 It's clear too that our focus should be on these functions because our vector field is essentially horizontal everywhere (see Figure \ref{fig:nullc_nag}) that isn't in the neighborhood of the $V$-nullcline because we again made $V$ the fast variable and $n$ the slow one. 
 
-We are under the assumption that our nullclines intersect at exactly one point. Hence, it must be true that our $n$-nullcline intersects with precisely one of these three branches. As we've seen before, the cubic has two elbows (turning points) at $V_l(n)=V_m(n)$ and at $V_e(n)=V_m(n)$ which results in the hysteresis we are now familiar with. So, we can observe that, if we've captured the characteristics we're interested in from our previous model properly and $\frac{dn}{dt}$ has the appropriate sign on $V_r(n)$ or $V_l(n)$, a fixed point on $V_r(n)$ or $V_l(n)$ should be stable and not so for $V_m(n)$. We can observe from Figure \ref{fig:nullc_nag} that this is indeed the case for at least one left-branch intersection (on $V_l(n)$). We'll prove this for the general case in our analytical discussion. 
+We are under the assumption that our nullclines intersect at exactly one point. Hence, it must be true that our $n$-nullcline intersects with precisely one of these three branches. As we've seen before, the cubic has two elbows (turning points) at $V_l(n)=V_m(n)$ and at $V_r(n)=V_m(n)$ which results in the hysteresis we are now familiar with. So, we can observe that, if we've captured the characteristics we're interested in from our previous model properly and $\frac{dn}{dt}$ has the appropriate sign on $V_r(n)$ or $V_l(n)$, a fixed point on $V_r(n)$ or $V_l(n)$ should be stable and not so for $V_m(n)$. We can observe from Figure \ref{fig:nullc_nag} that this is indeed the case for at least one left-branch intersection (on $V_l(n)$). We'll prove this for the general case in our analytical discussion. 
 
 Furthermore, we can see how hysteresis could occur from Figure \ref{fig:nullc_nag} as well. Indeed, if the fixed point lies on the middle branch we should see "relaxation oscillations" \cite{strog}. In other words, initial values will jump from the right to left branch and vis-versa for the same reasons discussed in the previous section, never reaching the fixed point and oscillating continuously. 
 
@@ -375,7 +375,7 @@ So, our bifurcation schematic would contain three regions
     \end{cases}
 \end{align*}
 
-in agreement with our previous analyses. Note that 0.02 and 0.33 are our visual approximations. 
+in agreement with our previous analyses. Note that 0.02 and 0.33 are our visual approximations and specific to this model (so the voltages don't match up necessarily with our other models). 
 
 \subsection{Comparison with the True H-H Model}
 
